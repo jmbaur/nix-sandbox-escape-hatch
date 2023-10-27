@@ -19,18 +19,18 @@ path, and everything after that is normal nix!
 1. Add some configuration like below. Note that the builder expects to create
    some output in `$out`, just like a derivation output. See below for why we
    setup system features in our nix.conf.
-```nix
-{ pkgs, ...}: {
-    nix.settings.system-features = [ "my-special-feature" ];
-    services.nix-sandbox-escape-hatch = {
-        enable = true;
-        builders.test.builder = pkgs.writeShellScript "test-escape-hatch.bash" ''
-            mkdir -p $out
-            touch $out/$1
-        '';
-    };
-}
-```
+    ```nix
+    { pkgs, ...}: {
+        nix.settings.system-features = [ "my-special-feature" ];
+        services.nix-sandbox-escape-hatch = {
+            enable = true;
+            builders.test.builder = pkgs.writeShellScript "test-escape-hatch.bash" ''
+                mkdir -p $out
+                touch $out/$1
+            '';
+        };
+    }
+    ```
 1. Activate this new configuration.
 
 ## Client setup
@@ -43,13 +43,12 @@ path, and everything after that is normal nix!
    with nix installed from being able to successfully build our derivation. Use
    of `requiredSystemFeatures` is _highly_ recommended as a way of filtering
    which builder the derivation can be built on.
-```nix
-let
-    runMyEscapeHatch = makeEscapeHatchRunner "test" {
-        requiredSystemFeatures = [ "my-special-feature" ];
-    };
-in
-runMyEscapeHatch "test-foo" [ "foo" ]
-```
-1. Write
+    ```nix
+    let
+        runMyEscapeHatch = makeEscapeHatchRunner "test" {
+            requiredSystemFeatures = [ "my-special-feature" ];
+        };
+    in
+    runMyEscapeHatch "test-foo" [ "foo" ]
+    ```
 1. `nix build` and see that you now have a file at `./result/foo`!
