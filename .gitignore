@@ -1,0 +1,5 @@
+.direnv
+/outputs
+/target
+/tmp
+result*
