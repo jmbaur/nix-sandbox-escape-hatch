@@ -15,7 +15,7 @@ server: build
 	--setenv=RUNTIME_DIRECTORY \
 	--setenv=RUST_LOG \
 	{{justfile_directory()}}/target/debug/nix-sandbox-escape-hatch server \
-	{{justfile_directory()}}/test/builder.bash
+	{{justfile_directory()}}/dev-builder.bash
 
 client: build
 	{{justfile_directory()}}/target/debug/nix-sandbox-escape-hatch client \

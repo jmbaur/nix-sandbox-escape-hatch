@@ -1,8 +1,12 @@
-{ args, requiredSystemFeatures ? [ ], name ? "escape-hatch-derivation" }:
+{ name
+, args
+, requiredSystemFeatures ? [ ]
+, escapeHatchName
+, system ? builtins.currentSystem
+}:
 builtins.derivation {
-  inherit name requiredSystemFeatures;
-  system = builtins.currentSystem;
-  builder = "/bin/hatch";
+  inherit name system requiredSystemFeatures;
+  builder = "/bin/hatch-door";
   args = [ "client" ] ++ args;
-  NIX_SANDBOX_ESCAPE_HATCH_PATH = "/run/hatch.sock";
+  NIX_SANDBOX_ESCAPE_HATCH_PATH = "/run/${escapeHatchName}-hatch-door.sock";
 }

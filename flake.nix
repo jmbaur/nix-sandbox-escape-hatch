@@ -6,6 +6,7 @@
   outputs = { self, nixpkgs }: {
     overlays.default = final: prev: {
       nix-sandbox-escape-hatch = prev.callPackage ./default.nix { };
+      makeEscapeHatchRunner = escapeHatchName: hatchDoorCfg: name: args: import ./builder.nix (hatchDoorCfg // { inherit name args escapeHatchName; });
     };
     nixosModules.default = {
       nixpkgs.overlays = [ self.overlays.default ];
@@ -23,7 +24,7 @@
     packages = nixpkgs.lib.mapAttrs
       (system: pkgs: {
         default = pkgs.nix-sandbox-escape-hatch;
-        test = pkgs.callPackage ./test/nixos.nix {
+        test = pkgs.callPackage ./nixos-test.nix {
           module = self.nixosModules.default;
         };
       })
